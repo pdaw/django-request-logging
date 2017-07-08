@@ -36,7 +36,7 @@ class LogTestCase(BaseLogTestCase):
         self.middleware = LoggingMiddleware()
 
     def test_request_body_logged(self, mock_log):
-        body = "some body"
+        body = u"some body"
         datafile = io.StringIO(body)
         request = self.factory.post("/somewhere", data={"file": datafile})
         self.middleware.process_request(request)
@@ -59,7 +59,7 @@ class LogTestCase(BaseLogTestCase):
 
 class BaseLogSettingsTestCase(BaseLogTestCase):
     def setUp(self):
-        body = "some body"
+        body = u"some body"
         datafile = io.StringIO(body)
         self.request = RequestFactory().post(
             "/somewhere",
@@ -124,7 +124,7 @@ class LogSettingsMaxLengthTestCase(BaseLogTestCase):
         factory = RequestFactory()
         middleware = LoggingMiddleware()
 
-        body = DEFAULT_MAX_BODY_LENGTH * "0" + "1"
+        body = DEFAULT_MAX_BODY_LENGTH * u"0" + u"1"
         datafile = io.StringIO(body)
         request = factory.post("/somewhere", data={"file": datafile})
         middleware.process_request(request)
@@ -136,7 +136,7 @@ class LogSettingsMaxLengthTestCase(BaseLogTestCase):
         factory = RequestFactory()
         middleware = LoggingMiddleware()
 
-        body = 150 * "0" + "1"
+        body = 150 * u"0" + u"1"
         datafile = io.StringIO(body)
         request = factory.post("/somewhere", data={"file": datafile})
         middleware.process_request(request)

@@ -18,8 +18,7 @@ request_logger = logging.getLogger('django.request')
 
 class Logger:
     def log(self, level, msg):
-        for line in str(msg).split('\n'):
-            request_logger.log(level, line)
+        request_logger.log(level, str(msg))
 
     def log_error(self, level, msg):
         self.log(level, msg)
@@ -39,14 +38,12 @@ class ColourLogger(Logger):
         self._log(level, msg, self.log_error_colour)
 
     def _log(self, level, msg, colour):
-        for line in str(msg).split('\n'):
-            line = colorize(line, fg=colour)
-            request_logger.log(level, line)
+        request_logger.log(level, colorize(str(msg), fg=colour))
 
 
 class LoggingMiddleware(MiddlewareMixin):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super(MiddlewareMixin, self).__init__(*args, **kwargs)
 
         self.log_level = getattr(settings, SETTING_NAMES['log_level'], DEFAULT_LOG_LEVEL)
         if self.log_level not in [logging.NOTSET, logging.DEBUG, logging.INFO,
